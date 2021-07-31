@@ -11,6 +11,14 @@ blogRouter.get("/getblogs",async(req,res)=>{
         res.status(404).json(err);
     }
 })
+blogRouter.get("/getblog/:id",async(req,res)=>{
+    try{
+        const blog = await Blog.findById(req.params.id);
+        res.status(200).json(blog);
+    }catch(err){
+        res.status(404).json(err);
+    }
+})
 
 blogRouter.post("/createBlog",async(req,res)=>{
     try{
