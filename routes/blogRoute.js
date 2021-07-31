@@ -42,14 +42,16 @@ blogRouter.post("/createBlog", async (req, res) => {
   }
 });
 blogRouter.delete("/deleteBlog", async (req, res) => {
-  try {
-    const blog = await Blog.findByOne({title: req.body.title});
-    blog.remove();
-    res.status(200).json(blog);
-  } catch (err) {
-    res.status(404).json(err);
-  }
+    const blog = await Blog.deleteOne({ title: req.body.title }).then(function(){
+    res.json("Data deleted"); // Success
+}).catch(function(error){
+    res.json(error); // Failure
 });
+});
+
+
+
+
 blogRouter.put("/blog/comment/:id", async (req, res) => [
   Blog.findOneAndUpdate(
     { _id: req.params.id },
