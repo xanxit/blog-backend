@@ -41,9 +41,9 @@ blogRouter.post("/createBlog", async (req, res) => {
     res.status(404).json(err);
   }
 });
-blogRouter.delete("/deleteBlog/:id", async (req, res) => {
+blogRouter.delete("/deleteBlog", async (req, res) => {
   try {
-    const blog = await Blog.findByIdAndRemove(req.params.id);
+    const blog = await Blog.findByOneAndRemove({title: req.body.title});
     res.status(200).json(blog);
   } catch (err) {
     res.status(404).json(err);
