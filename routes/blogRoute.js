@@ -43,7 +43,8 @@ blogRouter.post("/createBlog", async (req, res) => {
 });
 blogRouter.delete("/deleteBlog", async (req, res) => {
   try {
-    const blog = await Blog.findByOneAndRemove({title: req.body.title});
+    const blog = await Blog.findByOne({title: req.body.title});
+    blog.remove();
     res.status(200).json(blog);
   } catch (err) {
     res.status(404).json(err);
