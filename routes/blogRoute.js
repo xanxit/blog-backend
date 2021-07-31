@@ -1,5 +1,5 @@
 const express = require("express");
-const authmiddleware = require("../middleware/authmiddleware");
+const authMiddleware = require("../middleware/authmiddleware");
 const blogRouter = express.Router();
 const Blog = require("../models/blog");
 
@@ -80,16 +80,22 @@ blogRouter.put("/blog/likes/:id", async (req, res) => {
 });
 
 //update blog
-blogRouter.put("/blog/:id", async (req, res) => {
-  try {
-    const blog = await Blog.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-      runValidators: true,
-    });
-    res.status(200).json(blog);
-  } catch (err) {
-    res.status(404).json(err);
-  }
+blogRouter.put("/blog", async (req, res) => {
+    const blog = await Blog.findOne({title: req.body.title});
+    if(req.body.image)
+    {
+      blog.image = req.body.image;
+    }
+    if(req.body.content)
+    {
+      blog.content = req.body.content;
+    }
+        try {
+          blog.save();
+        } catch (error) {
+          res.json(error);
+        }
+        res.status(200).json({ message: "Blog updated successfully!" });
 });
 
 module.exports = blogRouter;
