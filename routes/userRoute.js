@@ -45,7 +45,7 @@ userRouter.post(
       if (bcrypt.compareSync(req.body.password, user.password)) {
         res.json({
           _id: user._id,
-          name: user.name,
+          firstname: user.firstname,
           email: user.email,
           token: generateToken(user),
         });
