@@ -13,37 +13,13 @@ userRouter.post(
     const Username = await User.findOne({ email: req.body.email });
     if (Username) {
       res.status(401).json("User already exist!");
-    } else {
-      var transporter = nodemailer.createTransport({
-        service: "gmail",
-        auth: {
-          user: process.env.EMAIL,
-          pass: process.env.PASSWORD,
-        },
-      });
-      if (!User.findOne({ email:req.body.email })) {
-        var email = req.body.email;
-        var mailOptions = {
-          from: "crashxdevelopers@gmail.com",
-          to: email,
-          subject: "Welcome to the blog website.",
-          html: `<h2> You have been registered as an Admin to the blog website.</h2><br><p>Now you can create, update, delete the blogs in the website.</p>`,
-        };
-
-        transporter.sendMail(mailOptions, (error, info) => {
-          try {
-            console.log(info);
-          } catch {
-            console.log(error);
-          }
-        });
-      }
-    } 
+    }
     const user = new User({
-        name: req.body.name,
+        firstname: req.body.firstname,
+        lastname: req.body.lastname,
         email: req.body.email,  
-        password: bcrypt.hashSync(req.body.password, 10),
-        confirmpassword: bcrypt.hashSync(req.body.confirmpassword, 10)
+        password: bcrypt.hashSync(req.body.password, 8),
+        confirmpassword: bcrypt.hashSync(req.body.confirmpassword, 8)
   })
   try {
     if (req.body.password === req.body.confirmpassword) {
@@ -55,9 +31,8 @@ userRouter.post(
 
   res.status(200).json({
     _id: user._id,
-    name: user.name,
+    name: user.firstname,
     email: user.email,
-    phone: user.phone,
     token: generateToken(user),
   });
   }));
